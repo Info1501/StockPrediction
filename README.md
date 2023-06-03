@@ -11,15 +11,18 @@ It uses different algorithm's with range from Machine Learning ones to Algorithm
 
 The app was developed in Python 3 and makes use of Python's libraries for Machine Learning and more .
 
-The app is still in early developement only one of the supposed algorithms is implemented and it lacks a GUI.
+The app is still in early developement only some of the intended algorithms have been implemented so far.
 
 
 ## Run the App
-
-In order to run the app one must run the Main.py file i.e using the "python Main.py" command while in the file where "Main.py" is present.
+Install Git - https://github.com/git-guides/install-git \
+Clone the repository https://docs.github.com/en/repositories/creating-and-managing-repositories/cloning-a-repository \
+Open the Python project \
+Run the command "pip install -r requirements.txt" - this command downloads all the necessary libraries, in the Python terminal  \
+Run the command "streamlit run Your\Path\main.py" in the Python terminal 
 
 ## Use the App
-In order to use the app afte running the above command the user must respond to the prompts. This is only temporary asa GUI will be implemented
+Using the app is very intuitive , select the desired type of analysis from the drop down menu afterwards select it's type and decide on what stock would you like an analysis on.
 
 ## Credits
 
