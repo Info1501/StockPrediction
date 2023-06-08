@@ -4,7 +4,8 @@ import datetime
 import LSTM
 import streamlit as st
 import SelfAnalysis as sa
-import  DecisionTree as dt
+import DecisionTree as dt
+import EliottWaves as ew
 # Press Shift+F10 to execute it or replace it with your code.
 # Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
 
@@ -19,7 +20,7 @@ if __name__ == '__main__':
     st.write("# Intelligent Systems based on Stock Market Analysis")
 
     lstm = LSTM.LSTModel()
-    option = st.selectbox('What type of analysis would you like to use ?',("Self Analsysis","LSTM","Decision Tree"))
+    option = st.selectbox('What type of analysis would you like to use ?',("Self Analsysis","LSTM","Decision Tree","Elliot Waves"))
     if option == "LSTM":
 
         new_option = st.selectbox('Would you like to learn more about LSTM or see the real thing?',("Select Here","Learn More","LSTM Price Prediction"))
@@ -93,6 +94,27 @@ The Gini index is used in the decision tree algorithm to determine the best spli
             tree.BuildTreeReal(stock)
 
 
+    if option == "Elliot Waves":
+        elliot = ew.Eliott()
+        stock = st.text_input(label='Stock Ticker', value="AAPL")
+        elliot.Waves(stock)
+        st.write('''Elliott Wave Theory is a technical analysis approach that seeks to identify recurring patterns in financial markets. It is based on the idea that market prices move in waves, both in upward and downward directions, due to the psychology of market participants.
+
+According to Elliott Wave Theory, price movements can be categorized into two types of waves: impulse waves and corrective waves. Impulse waves represent the main direction of the market trend, while corrective waves are counter-trend movements that occur within the larger trend.
+
+The Elliott Wave principle suggests that price waves follow a specific pattern of five waves in the direction of the trend (impulse waves), followed by three waves in the opposite direction (corrective waves).''')
+        st.markdown("Impulse waves:")
+        st.markdown("- Wave 1: The initial wave in the direction of the trend.")
+        st.markdown("- Wave 2: A corrective wave that retraces a portion of Wave 1.")
+        st.markdown("- Wave 3: The strongest and longest wave that extends beyond Wave 1.")
+        st.markdown("- Wave 4: Another corrective wave that retraces a portion of Wave 3.")
+        st.markdown("- Wave 5: The final wave in the direction of the trend.")
+        st.markdown("Corrective waves:")
+        st.markdown("- Wave A: A corrective wave in the opposite direction of the trend.")
+        st.markdown("- Wave B: A corrective wave that retraces a portion of Wave A.")
+        st.markdown("- Wave C: The final corrective wave that moves in the opposite direction of the trend.")
+        st.write("The Elliott Wave algorithm analyzes the price data of a stock and identifies potential upward and downward waves, as well as corrective upward and downward moves. It then visualizes these patterns on a graph.")
+        st.write("While this code can help in identifying potential wave patterns in historical price data, it's important to note that Elliott Wave Theory is subjective and open to interpretation. ")
 
 
 
