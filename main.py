@@ -6,6 +6,8 @@ import streamlit as st
 import SelfAnalysis as sa
 import DecisionTree as dt
 import EliottWaves as ew
+import CandleStick as cs
+from Patterns import candlestick_patterns
 # Press Shift+F10 to execute it or replace it with your code.
 # Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
 
@@ -20,7 +22,7 @@ if __name__ == '__main__':
     st.write("# Intelligent Systems based on Stock Market Analysis")
 
     lstm = LSTM.LSTModel()
-    option = st.selectbox('What type of analysis would you like to use ?',("Self Analsysis","LSTM","Decision Tree","Elliot Waves"))
+    option = st.selectbox('What type of analysis would you like to use ?',("Self Analsysis","LSTM","Decision Tree","Elliot Waves","Technical Analysis"))
     if option == "LSTM":
 
         new_option = st.selectbox('Would you like to learn more about LSTM or see the real thing?',("Select Here","Learn More","LSTM Price Prediction"))
@@ -115,6 +117,14 @@ The Elliott Wave principle suggests that price waves follow a specific pattern o
         st.markdown("- Wave C: The final corrective wave that moves in the opposite direction of the trend.")
         st.write("The Elliott Wave algorithm analyzes the price data of a stock and identifies potential upward and downward waves, as well as corrective upward and downward moves. It then visualizes these patterns on a graph.")
         st.write("While this code can help in identifying potential wave patterns in historical price data, it's important to note that Elliott Wave Theory is subjective and open to interpretation. ")
+
+    if option == "Technical Analysis":
+        candle = cs.CandleStick()
+        stock = st.text_input(label='Stock Ticker', value="AAPL")
+        new_option = st.selectbox('What Pattern would you like to look for',
+                                  (candlestick_patterns.values()))
+
+        candle.SearchPattern(new_option,stock)
 
 
 
