@@ -6,67 +6,69 @@ import plotly.graph_objects as go
 class Eliott:
 
     def Waves(self,stock):
+        try:
+            end = datetime.date.today()
+            start = end - datetime.timedelta(days=30)
+            df = web.DataReader(stock, data_source='stooq', start=start, end=end)
 
-        end = datetime.date.today()
-        start = end - datetime.timedelta(days=30)
-        df = web.DataReader(stock, data_source='stooq', start=start, end=end)
+            prices = df.filter(["Close", "Open"])
+            prices = prices[::-1]
+            values = df.filter(["Close"])
 
-        prices = df.filter(["Close", "Open"])
-        prices = prices[::-1]
-        values = df.filter(["Close"])
+            fig = go.Figure()
+            fig.add_trace(go.Scatter(x=values.index, y=values["Close"], name="Values"))
 
-        fig = go.Figure()
-        fig.add_trace(go.Scatter(x=values.index, y=values["Close"], name="Values"))
+            upward_waves = self.RecognizeUpward(prices)
+            downward_waves = self.RecognizeDownward(prices)
+            corrective_upward_moves = self.RecognizeCorrectiveUpward(prices)
+            corrective_downward_moves = self.RecognizeCorrectiveDownward(prices)
 
-        upward_waves = self.RecognizeUpward(prices)
-        downward_waves = self.RecognizeDownward(prices)
-        corrective_upward_moves = self.RecognizeCorrectiveUpward(prices)
-        corrective_downward_moves = self.RecognizeCorrectiveDownward(prices)
+            if not upward_waves.empty:
+                fig.add_trace(go.Scatter(
+                    x=upward_waves.index,
+                    y=upward_waves["Close"],
+                    mode='markers',
+                    name='Upward Waves',
+                    marker=dict(color='green', size=15)
+                ))
 
-        if not upward_waves.empty:
-            fig.add_trace(go.Scatter(
-                x=upward_waves.index,
-                y=upward_waves["Close"],
-                mode='markers',
-                name='Upward Waves',
-                marker=dict(color='green', size=15)
-            ))
+            if not downward_waves.empty:
+                fig.add_trace(go.Scatter(
+                    x=downward_waves.index,
+                    y=downward_waves["Close"],
+                    mode='markers',
+                    name='Downward Waves',
+                    marker=dict(color='red', size=15)
+                ))
 
-        if not downward_waves.empty:
-            fig.add_trace(go.Scatter(
-                x=downward_waves.index,
-                y=downward_waves["Close"],
-                mode='markers',
-                name='Downward Waves',
-                marker=dict(color='red', size=15)
-            ))
+            if not corrective_upward_moves.empty:
+                fig.add_trace(go.Scatter(
+                    x=corrective_upward_moves.index,
+                    y=corrective_upward_moves["Close"],
+                    mode='markers',
+                    name='Corrective Upward Moves',
+                    marker=dict(color='orange', size=10)
+                ))
 
-        if not corrective_upward_moves.empty:
-            fig.add_trace(go.Scatter(
-                x=corrective_upward_moves.index,
-                y=corrective_upward_moves["Close"],
-                mode='markers',
-                name='Corrective Upward Moves',
-                marker=dict(color='orange', size=10)
-            ))
+            if not corrective_downward_moves.empty:
+                fig.add_trace(go.Scatter(
+                    x=corrective_downward_moves.index,
+                    y=corrective_downward_moves["Close"],
+                    mode='markers',
+                    name='Corrective Downward Moves',
+                    marker=dict(color='black', size=10)
+                ))
 
-        if not corrective_downward_moves.empty:
-            fig.add_trace(go.Scatter(
-                x=corrective_downward_moves.index,
-                y=corrective_downward_moves["Close"],
-                mode='markers',
-                name='Corrective Downward Moves',
-                marker=dict(color='black', size=10)
-            ))
+            fig.update_layout(
+                title="Pattern",
+                xaxis_title="Date",
+                yaxis_title="Closing",
+                showlegend=True
+            )
 
-        fig.update_layout(
-            title="Pattern",
-            xaxis_title="Date",
-            yaxis_title="Closing",
-            showlegend=True
-        )
-
-        st.plotly_chart(fig)
+            st.plotly_chart(fig)
+        except Exception as e:
+            st.write("### There is no such stock ticker !!")
 
     def RecognizeUpward(self, prices):
         wave_patterns = pd.DataFrame(columns=["Close"])

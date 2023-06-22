@@ -9,6 +9,7 @@ import matplotlib.pyplot as plt
 from keras.models import Sequential
 from keras.layers import LSTM,Dense
 import streamlit as st
+import plotly.graph_objects as go
 class LSTModel:
 
 	def split_sequence(sequence, n_steps):
@@ -97,20 +98,19 @@ class LSTModel:
 	def BuildModel_Real(self,Stock):
 
 		try:
-			plt.style.use('fivethirtyeight')
 			# Gather data
 			end = datetime.date.today()
 			start = end - datetime.timedelta(days=360)
-			df = web.DataReader(Stock,'stooq',start,end)
+			df = web.DataReader(Stock, 'stooq', start, end)
 
-			#Extract needed data and convert
+			# Extract needed data and convert
 			data = df.filter(['Close'])
 			data = data.iloc[::-1]
 			dataset = data.values
 			scaler = MinMaxScaler(feature_range=(0, 1))
-			scaled_dataset=scaler.fit_transform(dataset)
+			scaled_dataset = scaler.fit_transform(dataset)
 
-			#Test Data
+			# Test Data
 			x_train = []
 			y_train = []
 			for i in range(30, len(scaled_dataset)):
@@ -121,8 +121,6 @@ class LSTModel:
 			x_train = np.reshape(x_train, (x_train.shape[0], x_train.shape[1], 1))
 
 			# Build model
-
-
 			model = Sequential()
 			model.add(LSTM(50, return_sequences=True, input_shape=(x_train.shape[1], 1)))
 			model.add(LSTM(50, return_sequences=False))
@@ -132,35 +130,31 @@ class LSTModel:
 			model.fit(x_train, y_train, batch_size=1, epochs=10)
 
 			# Predicting next day based on the last month
-
-			data=df.filter(['Close'])
+			data = df.filter(['Close'])
 			data = data.iloc[::-1]
-			data_predict=data[-30:].values
-			data_predict_scaled= scaler.fit_transform(data_predict)
-
+			data_predict = data[-30:].values
+			data_predict_scaled = scaler.fit_transform(data_predict)
 
 			x_predict_test = []
 			x_predict_test.append(data_predict_scaled)
 			x_predict_test = np.array(x_predict_test)
-			x_predict_test = np.reshape(x_predict_test,(x_predict_test.shape[0],x_predict_test.shape[1],1))
+			x_predict_test = np.reshape(x_predict_test, (x_predict_test.shape[0], x_predict_test.shape[1], 1))
 
 			predicted_price = model.predict(x_predict_test)
 			predicted_price = scaler.inverse_transform(predicted_price)
-			# Plot test
+
+			# Plot test using Plotly
 			predicted_date = datetime.date.today() + datetime.timedelta(1)
 
+			fig = go.Figure()
+			fig.add_trace(go.Scatter(x=df.index, y=df['Close'], name="Values"))
+			fig.add_trace(go.Scatter(x=[predicted_date], y=predicted_price[0], mode='markers', name="Prediction",
+									 marker=dict(color="red")))
 
-			plt.figure(figsize=(16, 8))
-			plt.title("Prediction")
-			plt.xlabel("Date", fontsize=18)
-			plt.ylabel("Closing", fontsize=18)
-			plt.plot(data)
-			plt.scatter(predicted_date,predicted_price,c="red")
-			plt.legend(["Values", "Prediction"], loc="lower right")
-			plt.tight_layout()
-			#plt.show()
-			st.pyplot(plt)
-			st.write("### Exact closing price prediction: " + str(predicted_price).replace("[","").replace("]",""))
+			fig.update_layout(title="Prediction", xaxis_title="Date", yaxis_title="Closing")
+
+			st.plotly_chart(fig)
+			st.write("### Exact closing price prediction: " + str(predicted_price).replace("[", "").replace("]", ""))
 		except:
 			st.write("### There is no such stock ticker !!")
 

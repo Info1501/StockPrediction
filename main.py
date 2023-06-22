@@ -22,7 +22,7 @@ if __name__ == '__main__':
     st.write("# Intelligent Systems based on Stock Market Analysis")
 
     lstm = LSTM.LSTModel()
-    option = st.selectbox('What type of analysis would you like to use ?',("Self Analsysis","LSTM","Decision Tree","Elliot Waves","Technical Analysis"))
+    option = st.selectbox('What type of analysis would you like to use ?',("Self Analsysis","LSTM","Decision Tree","Elliot Waves","Technical Analysis based on Japanese Candlestick"))
     if option == "LSTM":
 
         new_option = st.selectbox('Would you like to learn more about LSTM or see the real thing?',("Select Here","Learn More","LSTM Price Prediction"))
@@ -118,13 +118,23 @@ The Elliott Wave principle suggests that price waves follow a specific pattern o
         st.write("The Elliott Wave algorithm analyzes the price data of a stock and identifies potential upward and downward waves, as well as corrective upward and downward moves. It then visualizes these patterns on a graph.")
         st.write("While this code can help in identifying potential wave patterns in historical price data, it's important to note that Elliott Wave Theory is subjective and open to interpretation. ")
 
-    if option == "Technical Analysis":
+    if option == "Technical Analysis based on Japanese Candlestick":
         candle = cs.CandleStick()
         stock = st.text_input(label='Stock Ticker', value="AAPL")
         new_option = st.selectbox('What Pattern would you like to look for',
                                   (candlestick_patterns.values()))
 
         candle.SearchPattern(new_option,stock)
+        st.write('''Candlestick graphs provide more detailed information compared to traditional line charts. Each individual "candlestick" on the graph represents a specific time period, such as a day, week, or month, and displays four key data points: the opening price, the closing price, the highest price, and the lowest price.
+
+The candlestick itself consists of a rectangular body and two lines, called "wicks" or "shadows," extending from the top and bottom of the body. The body represents the price range between the opening and closing prices, while the wicks represent the high and low prices during that time period. The color of the candlestick can be either bullish (typically green or white) or bearish (typically red or black), depending on whether the closing price is higher or lower than the opening price.Japanese candlestick patterns are specific formations that occur on candlestick charts and are used by traders to identify potential trend reversals, continuation patterns, or market indecision. These patterns can provide insights into the psychology of market participants and can help traders make informed decisions about buying or selling an asset.
+
+Here are a few commonly recognized Japanese candlestick patterns:''')
+        st.markdown("-Doji: This pattern occurs when the opening and closing prices are very close or equal, resulting in a small or no body. It suggests market indecision and can indicate a potential trend reversal.")
+        st.markdown("-Hammer and Hanging Man: These patterns have small bodies with long lower wicks and little to no upper wicks. A hammer occurs during a downtrend and suggests a potential bullish reversal, while a hanging man occurs during an uptrend and suggests a potential bearish reversal.")
+        st.markdown("-Engulfing Pattern: This pattern consists of two candlesticks where the body of the second candle completely engulfs the body of the first candle. A bullish engulfing pattern occurs during a downtrend and suggests a potential bullish reversal, while a bearish engulfing pattern occurs during an uptrend and suggests a potential bearish reversal.")
+        st.markdown("-Morning Star and Evening Star: These patterns are formed by a combination of three candlesticks. The morning star occurs during a downtrend and consists of a long bearish candle, followed by a small bullish or bearish candle, and then a long bullish candle. It suggests a potential bullish reversal. The evening star occurs during an uptrend and is the opposite of the morning star, suggesting a potential bearish reversal.")
+        st.write("These are only part of the candlestick pattern present in the app , for the others , you should search for them and understand them before putting your capital at risk. ")
 
 
 
