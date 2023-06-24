@@ -7,6 +7,7 @@ import SelfAnalysis as sa
 import DecisionTree as dt
 import EliottWaves as ew
 import CandleStick as cs
+import Piotrosky as pt
 from Patterns import candlestick_patterns
 # Press Shift+F10 to execute it or replace it with your code.
 # Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
@@ -22,7 +23,7 @@ if __name__ == '__main__':
     st.write("# Intelligent Systems based on Stock Market Analysis")
 
     lstm = LSTM.LSTModel()
-    option = st.selectbox('What type of analysis would you like to use ?',("Self Analsysis","LSTM","Decision Tree","Elliot Waves","Technical Analysis based on Japanese Candlestick"))
+    option = st.selectbox('What type of analysis would you like to use ?',("Self Analsysis","LSTM","Decision Tree","Elliot Waves","Technical Analysis based on Japanese Candlestick","Fundamental Analysis based on Piotrosky F-Score"))
     if option == "LSTM":
 
         new_option = st.selectbox('Would you like to learn more about LSTM or see the real thing?',("Select Here","Learn More","LSTM Price Prediction"))
@@ -135,6 +136,26 @@ Here are a few commonly recognized Japanese candlestick patterns:''')
         st.markdown("-Engulfing Pattern: This pattern consists of two candlesticks where the body of the second candle completely engulfs the body of the first candle. A bullish engulfing pattern occurs during a downtrend and suggests a potential bullish reversal, while a bearish engulfing pattern occurs during an uptrend and suggests a potential bearish reversal.")
         st.markdown("-Morning Star and Evening Star: These patterns are formed by a combination of three candlesticks. The morning star occurs during a downtrend and consists of a long bearish candle, followed by a small bullish or bearish candle, and then a long bullish candle. It suggests a potential bullish reversal. The evening star occurs during an uptrend and is the opposite of the morning star, suggesting a potential bearish reversal.")
         st.write("These are only part of the candlestick pattern present in the app , for the others , you should search for them and understand them before putting your capital at risk. ")
+    if option =="Fundamental Analysis based on Piotrosky F-Score":
+        piotrosky = pt.Piotrosky()
+        stock = st.text_input(label='Stock Ticker', value="AAPL")
+        piotrosky.Grade(stock)
 
+        st.write("""Piotroski F-score is a number between 0 and 9 which is used to assess strength of company's financial position. The score is used by financial investors in order to find the best value stocks (nine being the best). The score is named after Stanford accounting professor Joseph Piotroski. Altough usually this is graded from 0-9 I choose to use 0-8 as one of the grading criteria being used seemed obsolete to me.""")
+        st.write("Calculation procedure: The score is calculated based on 8 criteria divided into 3 groups.")
+        st.markdown("**_Profitability_**")
+        st.markdown("-Return on Assets")
+        st.markdown("-Operating Cash Flow")
+        st.markdown("-Change in Return of Assets")
+        st.markdown("-Accruals")
+        st.markdown("**_Leverage, Liquidity and Source of Funds_**")
+        st.markdown("-Change in Leverage")
+        st.markdown("-Change in Current ratio")
+        st.markdown("**_Operating Efficiency_**")
+        st.markdown("-Change in Gross Margin")
+        st.markdown("-Change in Asset Turnover ratio")
+        st.write("""A company that has Piotroski F-score of 7–8 is considered to be strong. Alternatively, firms achieving the F-score of 0–2 are considered to be weak.
+
+Average value of Piotroski F-score can be different in different branches of economy (e.g. manufacturing, finance, etc.). This should be taken into consideration when comparing companies with different specializations.""")
 
 
